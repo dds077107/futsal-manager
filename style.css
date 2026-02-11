@@ -663,4 +663,9 @@ body::-webkit-scrollbar {
     /* 부모 크기 따라가기 */
     width: 100% !important;
     text-align: center !important;
+
 }
+
+/* 광고 영역이 하단 버튼에 가려지지 않게 여백 추가 */
+.setup-card { padding-bottom: 20px !important; }
+.view { padding-bottom: 140px !important; } /* 버튼 높이 + 광고 높이만큼 여백 */
