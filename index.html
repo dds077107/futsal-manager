@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>풋살 매니저 PWA</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00ff88">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+        <div class="pitch-bg">
+            <div class="pitch-line-center"></div>
+            <div class="pitch-circle"></div>
+        </div>
+
+        <header class="hud-header hidden">
+            <div class="timer-section">
+                <div id="timer-display">13:30</div>
+                <div id="quarter-display">Q1</div>
+            </div>
+            <button id="main-menu-btn" class="glass-btn">MENU</button>
+        </header>
+
+        <main class="view-container">
+
+            <section id="setup-view" class="view active">
+                <div class="title-area">
+                    <h1 class="premium-title">FUTSAL<br>MANAGER</h1>
+                    <p class="subtitle">공정한 경기, 스마트한 로테이션</p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>경기 방식</h3>
+                    <div class="game-mode-selector">
+                        <button class="mode-btn active" data-mode="5">5 vs 5</button>
+                        <button class="mode-btn" data-mode="6">6 vs 6</button>
+                    </div>
+
+                    <h3>참가 인원</h3>
+                    <div class="player-count-selector">
+                        <button class="count-btn" data-count="5"><span>5</span><small>명</small></button>
+                        <button class="count-btn" data-count="6"><span>6</span><small>명</small></button>
+                        <button class="count-btn active" data-count="7"><span>7</span><small>명</small></button>
+                        <button class="count-btn" data-count="8"><span>8</span><small>명</small></button>
+                    </div>
+
+                    <h3>경기 시간</h3>
+                    <div class="time-selector">
+                        <button class="time-btn" data-minutes="10"><span>10</span><small>분</small></button>
+                        <button class="time-btn active" data-minutes="13.5"><span>13:30</span></button>
+                        <button class="time-btn" data-minutes="15"><span>15</span><small>분</small></button>
+                        <button class="time-btn" data-minutes="20"><span>20</span><small>분</small></button>
+                    </div>
+                </div>
+
+                <div class="bottom-action">
+                    <button id="start-draw-btn" class="primary-btn">순번 뽑기 시작</button>
+                </div>
+            </section>
+
+            <section id="draw-view" class="view hidden">
+                <h2 class="section-title">순번 선택</h2>
+                <div id="card-stack" class="card-grid">
+                </div>
+                <div class="bottom-action">
+                    <button id="go-to-match-btn" class="primary-btn hidden">경기 시작</button>
+                </div>
+            </section>
+
+            <section id="match-view" class="view hidden">
+                <div class="match-board">
+                    <div class="status-section in">
+                        <div class="status-header">
+                            <span class="badge in">PLAYING</span>
+                        </div>
+                        <div id="active-players" class="player-grid in"></div>
+                    </div>
+
+                    <div class="status-section out">
+                        <div class="status-header">
+                            <span class="badge out">BENCH</span>
+                        </div>
+                        <div id="resting-players" class="player-grid out"></div>
+                    </div>
+                </div>
+
+                <div class="bottom-action match-controls">
+                    <button id="timer-control-btn" class="primary-btn" id="timer-control-btn">START</button>
+                    <button id="next-quarter-btn" class="glass-btn">NEXT Q</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+</body>
+
+</html>

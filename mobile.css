@@ -1,0 +1,206 @@
+/* ===================================
+   모바일 최적화 스타일
+   갤럭시 폴드 7, 아이폰 등 모든 모바일 기기 대응
+   =================================== */
+
+/* 모든 모바일 기기 공통 */
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+    }
+
+    #app {
+        height: 100vh;
+        max-height: 100vh;
+    }
+
+    .view {
+
+        /* 하단 여백 증가 */
+    }
+
+    /* 타이틀 크기 축소 */
+    .premium-title {
+        font-size: 3.2rem;
+        margin-top: 15px;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 25px;
+    }
+
+    /* 카드 간격 및 크기 최적화 */
+    .card-stack {
+        gap: 8px;
+        margin-top: 8px;
+        margin-bottom: 15px;
+        /* 하단 여백 증가 */
+    }
+
+    .card-stack.count-7 {
+        gap: 6px;
+    }
+
+    .draw-item .player-num {
+        font-size: 3.5rem;
+    }
+
+    /* 버튼 크기 최적화 */
+    .primary-btn {
+        height: 58px;
+        font-size: 1.35rem;
+        padding: 16px 28px;
+        margin-top: 8px;
+        /* 상단 여백 */
+    }
+
+    /* 인원 선택 버튼 */
+    .count-btn span {
+        font-size: 2.5rem;
+    }
+
+    .count-btn small {
+        font-size: 0.65rem;
+    }
+
+    /* 시간 선택 버튼 */
+    .time-btn span {
+        font-size: 1.3rem;
+    }
+
+    .time-btn small {
+        font-size: 0.65rem;
+    }
+}
+
+/* 작은 화면 (아이폰 SE, 작은 안드로이드) */
+@media (max-height: 700px) {
+    .view {
+        padding: 0 14px 40px 14px;
+        /* 여백 조정 */
+    }
+
+    .premium-title {
+        font-size: 2.5rem;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+    }
+
+    .card-stack {
+        gap: 5px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .card-stack.count-7 {
+        gap: 4px;
+    }
+
+    .draw-item .player-num {
+        font-size: 2.8rem;
+    }
+
+    .primary-btn {
+        height: 52px;
+        font-size: 1.25rem;
+        padding: 14px 24px;
+        margin-top: 5px;
+    }
+
+    .count-btn span {
+        font-size: 2.2rem;
+    }
+
+    .time-btn span {
+        font-size: 1.1rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+        margin-top: 15px !important;
+        margin-bottom: 10px;
+    }
+}
+
+/* 매우 작은 화면 (아이폰 SE 1세대 등) */
+@media (max-height: 600px) {
+    .view {
+        padding: 0 12px 35px 12px;
+    }
+
+    .premium-title {
+        font-size: 2rem;
+        margin-top: 5px;
+        margin-bottom: 3px;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+        margin-bottom: 10px;
+    }
+
+    .card-stack {
+        gap: 3px;
+        margin-top: 3px;
+        margin-bottom: 8px;
+    }
+
+    .draw-item .player-num {
+        font-size: 2.3rem;
+    }
+
+    .primary-btn {
+        height: 48px;
+        font-size: 1.15rem;
+        margin-top: 3px;
+    }
+
+    .player-count-selector,
+    .time-selector {
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    h3 {
+        font-size: 0.9rem;
+        margin-top: 10px !important;
+    }
+}
+
+/* 경기 화면 최적화 */
+@media (max-height: 700px) {
+    .split-panels {
+        gap: 8px;
+    }
+
+    .panel h2 {
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+
+    .player-badge .p-num {
+        font-size: 2rem;
+    }
+
+    .player-badge .p-nick {
+        font-size: 0.75rem;
+    }
+
+    .controls {
+        padding-bottom: 8px;
+        margin-top: 10px;
+    }
+
+    #timer-control-btn,
+    #next-quarter-btn {
+        height: 60px;
+        font-size: 1.3rem;
+    }
+}

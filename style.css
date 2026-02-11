@@ -1,0 +1,666 @@
+/* =========================================
+   Futsal Manager - Mobile First System
+   Target: Galaxy Fold 7 Cover (320px width)
+   ========================================= */
+
+:root {
+    --primary: #00ff88;
+    --primary-dim: rgba(0, 255, 136, 0.15);
+    --bg-dark: #0a0c10;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --text-main: #ffffff;
+    --text-muted: #8899a6;
+    --accent-red: #ff4757;
+}
+
+/* 1. Global Reset & Scrollbar Kill */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    /* 앱처럼 느끼게 텍스트 선택 방지 */
+    scrollbar-width: none !important;
+    /* Firefox */
+}
+
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100dvh;
+    /* Dynamic Viewport Height */
+    background-color: var(--bg-dark);
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+    /* 전체 스크롤 방지 */
+}
+
+/* 2. App Container */
+#app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    max-width: 500px;
+    /* 태블릿/PC에서도 모바일 비율 유지 */
+    margin: 0 auto;
+}
+
+/* 배경 장식 */
+.pitch-bg {
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 3. View Architecture */
+.view-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.view {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    padding-bottom: 90px;
+    /* 하단 버튼 공간 확보 */
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.view.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 4. Components - Typography */
+.premium-title {
+    font-size: 2.8rem;
+    font-weight: 900;
+    line-height: 0.9;
+    text-align: center;
+    color: #fff;
+    margin: 20px 0 10px 0;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+}
+
+/* 5. Glass Card & Grid System (Fold 7 Friendly) */
+.glass-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+h3 {
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Grid: 무조건 한 줄에 들어가게 설계 */
+.player-count-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.time-selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    /* 좁은 간격 */
+}
+
+/* 6. Buttons */
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.count-btn,
+.time-btn {
+    background: #15181c;
+    border-radius: 12px;
+    height: 50px;
+    /* 고정 높이 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.2s;
+}
+
+.count-btn span {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.count-btn small {
+    font-size: 0.6rem;
+}
+
+.time-btn span {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.time-btn small {
+    font-size: 0.6rem;
+}
+
+.active {
+    background: var(--primary-dim);
+    border: 1px solid var(--primary);
+    color: var(--primary) !important;
+}
+
+.count-btn.active span,
+.time-btn.active span {
+    color: var(--primary);
+}
+
+/* 7. Bottom Fixed Action Area */
+.bottom-action {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, var(--bg-dark) 80%, transparent);
+    display: flex;
+    gap: 10px;
+}
+
+.primary-btn {
+    width: 100%;
+    height: 56px;
+    background: var(--primary);
+    color: #000;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+}
+
+.glass-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 12px;
+    font-weight: 600;
+    height: 56px;
+    flex: 1;
+}
+
+/* 8. Match & Draw Views */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* 기본 2열 */
+    gap: 8px;
+}
+
+.draw-item {
+    aspect-ratio: 1.2;
+    /* 약간 납작하게 */
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.draw-item.opened {
+    border-color: var(--primary);
+    color: var(--primary);
+    font-size: 2rem;
+}
+
+/* Match Board */
+.match-board {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+}
+
+.status-section {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.status-header {
+    margin-bottom: 10px;
+}
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.badge.in {
+    background: var(--primary);
+    color: #000;
+}
+
+.badge.out {
+    background: var(--accent-red);
+    color: #fff;
+}
+
+.player-grid {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+}
+
+.player-grid.in {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.player-grid.out {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.player-badge {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+}
+
+.p-num {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.p-nick {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* HUD Header */
+.hud-header {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#timer-display {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+/* =================================================
+   [FINAL FIX] 하단 버튼 고정 및 스크롤 문제 해결
+   ================================================= */
+
+/* 1. 버튼을 화면 바닥에 강제로 고정 (스크롤 무시) */
+.bottom-action {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+    /* 무조건 제일 위에 표시 */
+
+    /* 배경을 진하게 해서 뒤에 있는 카드가 비치지 않게 함 */
+    background: linear-gradient(to top, #0a0c10 85%, rgba(10, 12, 16, 0)) !important;
+    padding: 20px !important;
+    padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+    /* 아이폰 노치 대응 */
+}
+
+/* 2. 카드 리스트가 버튼에 가려지지 않도록 여백 추가 */
+.view {
+    padding-bottom: 120px !important;
+    /* 버튼 높이만큼 여백 확보 */
+    height: 100dvh !important;
+    overflow-y: auto !important;
+}
+
+/* 3. 스크롤바 다시 한 번 확실하게 제거 */
+.view::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+}
+
+/* 4. 카드 컨테이너 정렬 보정 */
+.card-grid {
+    padding-bottom: 50px !important;
+    /* 맨 마지막 카드 아래 여백 */
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+/* 5. 버튼 스타일 강화 */
+.primary-btn {
+    box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4) !important;
+    border: 1px solid rgba(0, 255, 136, 0.5) !important;
+}
+
+/* =================================================
+   [UI BALANCE FIX] 버튼 비율 및 크기 최적화
+   ================================================= */
+
+/* 1. 상단 [MENU] 버튼 슬림하게 다이어트 */
+.hud-header #main-menu-btn {
+    flex: 0 0 auto !important;
+    /* 꽉 차지 않게 설정 */
+    width: auto !important;
+    min-width: 80px !important;
+    /* 최소 너비 */
+    height: 38px !important;
+    /* 높이 줄임 */
+    padding: 0 16px !important;
+    font-size: 0.85rem !important;
+    margin-left: auto !important;
+    /* 오른쪽 끝으로 밀기 */
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 2. 하단 [경기 시작/일시정지] vs [다음 쿼터] 비율 조정 (7:3) */
+.match-controls {
+    display: flex !important;
+    gap: 10px !important;
+    /* 버튼 사이 간격 */
+    align-items: center !important;
+}
+
+/* 메인 버튼 (왼쪽 큰 것) */
+.match-controls #timer-control-btn {
+    flex: 2.5 !important;
+    /* 공간의 2.5만큼 차지 (약 70%) */
+    width: auto !important;
+    /* 100% 강제 해제 */
+    font-size: 1.2rem !important;
+}
+
+/* 보조 버튼 (오른쪽 작은 것 - NEXT Q) */
+.match-controls #next-quarter-btn {
+    flex: 1 !important;
+    /* 공간의 1만큼 차지 (약 30%) */
+    width: auto !important;
+    height: 56px !important;
+    /* 메인 버튼과 높이 맞춤 */
+    font-size: 0.9rem !important;
+    padding: 0 !important;
+    /* 내부 여백 제거해서 글자 확보 */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    /* 글자 줄바꿈 방지 */
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* =================================================
+   [UPDATE] 경기 방식 및 인원 선택 확장 스타일
+   ================================================= */
+
+.game-mode-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    height: 44px;
+    background: #15181c;
+    border-radius: 12px;
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.mode-btn.active {
+    background: var(--primary-dim);
+    border: 1px solid var(--primary);
+    color: var(--primary) !important;
+}
+
+/* 인원 선택 버튼이 4개가 되었으므로 그리드 변경 */
+.player-count-selector {
+    grid-template-columns: repeat(4, 1fr) !important;
+}
+
+/* =================================================
+   [UX UPGRADE] 카드 선택 효과 & IN/OUT 시각적 분리
+   ================================================= */
+
+/* 1. 순번 뽑기 카드 (Draw Cards) - 세련된 반전 효과 */
+.draw-item {
+    background: linear-gradient(145deg, #1a1d21, #101214) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #555 !important;
+    /* 뽑기 전엔 글씨를 어둡게 숨김 (신비감) */
+    font-weight: 700 !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* 카드가 선택(Opened)되었을 때 - 확연한 변화 */
+.draw-item.opened {
+    background: var(--primary) !important;
+    /* 형광 녹색 배경 */
+    border-color: var(--primary) !important;
+    color: #000 !important;
+    /* 글자는 진한 검정 (가독성 최강) */
+    transform: scale(0.96) !important;
+    /* 살짝 눌린 느낌 */
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.6) !important;
+    /* 형광 글로우 효과 */
+}
+
+/* 닉네임이 뽑혔을 때 텍스트 크기 강조 */
+.draw-item.opened .nick,
+.draw-item.opened .player-num {
+    font-size: 1.4rem !important;
+    font-weight: 900 !important;
+    text-shadow: none !important;
+}
+
+
+/* 2. 경기장 (IN) - 활기찬 그린 테마 */
+.status-section.in {
+    background: rgba(0, 255, 136, 0.05) !important;
+    /* 아주 연한 녹색 틴트 */
+    border: 1px solid rgba(0, 255, 136, 0.3) !important;
+    box-shadow: inset 0 0 20px rgba(0, 255, 136, 0.05) !important;
+}
+
+.status-section.in .status-header .badge {
+    background: var(--primary) !important;
+    color: #000 !important;
+    box-shadow: 0 2px 10px rgba(0, 255, 136, 0.3) !important;
+}
+
+/* 뛰는 선수 배지 디자인 */
+.player-grid.in .player-badge {
+    background: rgba(0, 20, 10, 0.6) !important;
+    border: 1px solid rgba(0, 255, 136, 0.2) !important;
+}
+
+.player-grid.in .player-badge .p-num {
+    color: var(--primary) !important;
+}
+
+
+/* 3. 벤치 (OUT) - 차분한 레드/그레이 테마 (확실한 구분) */
+.status-section.out {
+    background: rgba(255, 71, 87, 0.05) !important;
+    /* 아주 연한 붉은 틴트 */
+    border: 1px solid rgba(255, 71, 87, 0.3) !important;
+    margin-top: 10px !important;
+}
+
+.status-section.out .status-header .badge {
+    background: #ff4757 !important;
+    /* 강렬한 레드 */
+    color: #fff !important;
+    box-shadow: 0 2px 10px rgba(255, 71, 87, 0.3) !important;
+}
+
+/* 쉬는 선수 배지 디자인 (약간 어둡게 처리하여 비활성 느낌) */
+.player-grid.out .player-badge {
+    background: rgba(40, 10, 10, 0.6) !important;
+    border: 1px solid rgba(255, 71, 87, 0.2) !important;
+    opacity: 0.9 !important;
+}
+
+.player-grid.out .player-badge .p-num {
+    color: #ff4757 !important;
+    /* 숫자도 붉은색 */
+}
+
+/* =================================================
+   [VISIBILITY FIX] 순번 카드 가독성 대폭 개선
+   ================================================= */
+
+.draw-item {
+    /* 배경: 너무 어두운 검정 대신, 세련된 다크 그레이로 변경 */
+    background: linear-gradient(145deg, #2c3138, #202328) !important;
+
+    /* 테두리: 조금 더 명확하게 */
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+
+    /* 글자: 아주 잘 보이게 밝은 회색으로 변경 (핵심) */
+    color: rgba(255, 255, 255, 0.9) !important;
+
+    font-size: 1.2rem !important;
+    /* 글자도 조금 더 키움 */
+    font-weight: 700 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    /* 카드 그림자 추가 */
+
+    /* 배치 정렬 확실하게 */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* (참고) 눌렀을 때 형광색 반전 효과는 그대로 유지됨 */
+.draw-item.opened {
+    background: var(--primary) !important;
+    color: #000 !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.5) !important;
+}
+
+/* =================================================
+   [NIGHT MODE FIX] 야간 야외 시인성 극대화 (Big Fonts)
+   ================================================= */
+
+/* 1. 섹션 타이틀 (순번 선택) 키우기 */
+.section-title {
+    font-size: 2.2rem !important;
+    /* 제목도 시원하게 */
+    font-weight: 900 !important;
+    text-align: center !important;
+    margin-bottom: 20px !important;
+    letter-spacing: -1px !important;
+}
+
+/* 2. 카드 (누르기 전 - 닉네임) */
+.draw-item {
+    font-size: 1.6rem !important;
+    /* 닉네임 아주 크게 */
+    font-weight: 800 !important;
+    /* 아주 굵게 */
+    color: #ffffff !important;
+    /* 완전 흰색 (최고 대비) */
+    background: #1a1a1a !important;
+    /* 배경 더 어둡게 */
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    /* 테두리 선명하게 */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8) !important;
+    /* 글자 그림자 */
+}
+
+/* 3. 카드 (누른 후 - 숫자) -> 박스 꽉 차게 */
+.draw-item.opened {
+    font-size: 5.5rem !important;
+    /* 박스 터질듯한 크기 */
+    line-height: 1 !important;
+    font-weight: 900 !important;
+
+    /* 숫자 가독성 최적화 색상 (검정 글씨/형광 배경) */
+    color: #000000 !important;
+    background: var(--primary) !important;
+    text-shadow: none !important;
+
+    /* 패딩 제거해서 숫자 공간 확보 */
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* 4. 순번 카드 내의 텍스트 강제 확대 */
+.draw-item span,
+.draw-item .nick,
+.draw-item .p-num {
+    font-size: inherit !important;
+    /* 부모 크기 따라가기 */
+    width: 100% !important;
+    text-align: center !important;
+}
